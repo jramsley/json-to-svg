@@ -21,7 +21,6 @@ json.bodyData.forEach(a => {
   const type = a.type;
   switch (type) {
     case 'line':
-      console.log(a.data);
       const line = new Line({ data: a.data });
       svg.add(line);
       break;
@@ -30,7 +29,7 @@ json.bodyData.forEach(a => {
       svg.add(circle);
       break;
     case 'circularArc':
-      if(Math.abs(a.data.start[1] - a.data.end[1]) < 10**-9) {
+      if ( a.data.axisDir[2] === 0 ) {
         const line = new Line({ data: a.data });
         svg.add(line);
       } else {
@@ -47,5 +46,4 @@ json.bodyData.forEach(a => {
   }
 });
 
-console.log(svg.print());
 fs.writeFileSync(jsoneFileName, svg.print());

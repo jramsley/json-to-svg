@@ -15,11 +15,12 @@ if (!file) {
 }
 
 const right = file.includes('Right');
+const id = right ? 'right_view' : 'top_view';
 
 const jsoneFileName = path.parse(file).name + '.svg';
 const json = JSON.parse(fs.readFileSync(file, 'utf-8'));
 
-const svg = new Svg();
+const svg = new Svg({id: id});
 json.bodyData.forEach(a => {
   if(right) {
     if(Array.isArray(a.data)) {

@@ -51,7 +51,7 @@ json.bodyData.forEach(a => {
       svg.add(circle);
       break;
     case 'circularArc':
-      if ( a.data.axisDir[2] === 0 ) {
+      if ( Math.abs(a.data.axisDir[2]) < 1e-8 ) {
         const line = new Line({ data: a.data });
         svg.add(line);
       } else {

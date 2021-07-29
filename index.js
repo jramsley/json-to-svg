@@ -5,6 +5,7 @@ const BoundingBox = require('./lib/BoundingBox');
 const Circle = require('./lib/Circle');
 const CircularArc = require('./lib/CircularArc');
 const Line = require('./lib/Line');
+const Polyline = require('./lib/Polyline');
 const Spline = require('./lib/Spline');
 const Svg = require('./lib/Svg');
 
@@ -21,6 +22,15 @@ const json = JSON.parse(fs.readFileSync(file, 'utf-8'));
 const svg = new Svg();
 json.bodyData.forEach(a => {
   if(right) {
+    if(Array.isArray(a.data)) {
+      a.data = a.data.map(polyline => {
+          const x =  polyline[1];
+          const y = -polyline[0];
+          const z = polyline[2];
+
+          return [x, y, z];
+      });
+    }
     Object.keys(a.data).forEach(key => {
       if(Array.isArray(a.data[key]) && a.data[key].length === 3 && typeof a.data[key][0] === 'number') {
         const x =  a.data[key][1];
@@ -58,6 +68,10 @@ json.bodyData.forEach(a => {
         const circularArc = new CircularArc({ data: a.data });
         svg.add(circularArc);
       }
+      break;
+    case 'polyline':
+      const polyline = new Polyline({ data: a.data});
+      svg.add(polyline);
       break;
     case 'spline':
       const spline = new Spline({ data: a.data });
